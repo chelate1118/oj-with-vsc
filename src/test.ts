@@ -1,6 +1,8 @@
 import * as vscode from 'vscode'
 
 const execFile = require('child_process').execFile;
+const stream = require('stream');
+
 var workspacePath: string;
 var binaryPath: string;
 
@@ -28,54 +30,59 @@ export class TestCase {
         this.output = output
     }
 
-    public *test(sourcePath: string) {
+    public async test(sourcePath: string) {
         if (vscode.workspace.workspaceFolders == undefined) {
             vscode.window.showErrorMessage('Any workspace isn\'t existing')
             return 'workspace error';
         }
+        
+        let success = await compile(`${workspacePath}/${sourcePath}`, binaryPath);
+        if (!success) return;
+        
+        let [err, stdout, _stderr] = await executeBinary(binaryPath, this.input);
 
-        compile(`${workspacePath}/${sourcePath}`, binaryPath);
-
-        let [err, stdout, _stderr] = executeBinary(binaryPath, this.input)
-        var output = '.';
-
-        if(typeof(stdout) == 'string') {
-            output = stdout;
+        if(stdout == this.output) {
+            vscode.window.showInformationMessage('finish test');
         }
-
-        if (err != null) {
-            return 'error';
+        else {
+            vscode.window.showWarningMessage('test failed');
         }
-
-        return output;
     }
 }
 
-function compile(sourcePath: string, binaryPath: string) {
+async function compile(sourcePath: string, binaryPath: string) {
+    var finished = false;
+    var success = true;
+
     execFile('g++', [sourcePath, '-o', binaryPath], (
         err: string, stdout: string, stderr: string
     ) => {
-        console.log(`err: ${err}`);
-        console.log(`stdout: ${stdout}`);
-        console.log(`stderr: ${stderr}`);
-    })
+        if(err != null) {
+            success = false;
+            vscode.window.showErrorMessage('Compilation failed\n' + err);
+        }
+        finished = true;
+    });
+
+    while (!finished) {
+        console.log('wait compile');
+        await sleep(100);
+    }
+
+    return success;
 }
 
-function executeBinary(path: string, input: string) {
-    const execFile = require('child_process').execFile;
-    const stream = require('stream');
-
+async function executeBinary(path: string, input: string) {
+    var finished = false;
     var err, stdout, stderr;
 
-    console.log(`path: ${path}`);
-    console.log(`input: ${input}`);
-
-    const child_process = execFile(`./${path}`, (
+    const child_process = execFile(`${path}`, (
         error: string, stdoutput: string, stderror: string
     ) => {
         err = error;
         stdout = stdoutput;
         stderr = stderror;
+        finished = true;
     })
 
     const stdinStream = new stream.Readable();
@@ -83,5 +90,14 @@ function executeBinary(path: string, input: string) {
     stdinStream.push(null);
     stdinStream.pipe(child_process.stdin);
 
+    while (!finished) {
+        console.log('wait executing');
+        await sleep(100);
+    }
+
     return [err, stdout, stderr];
+}
+
+function sleep(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }

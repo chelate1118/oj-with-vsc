@@ -9,10 +9,9 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.window.showInformationMessage('Code Submitted');
 	});
 
-	let testRun = vscode.commands.registerCommand('chelate1118.oj-with.test', () => {
+	let testRun = vscode.commands.registerCommand('chelate1118.oj-with.test', async() => {
 		vscode.window.showInformationMessage('testing start...');
-		let [_x, y, _z] = new TestCase('10\n', '10').test('test.cpp');
-		vscode.window.showInformationMessage(y);
+		await new TestCase('10\n', '10\nHello, Worl!').test('test.cpp');
 	})
 
 	context.subscriptions.push(submitAction, testRun);
