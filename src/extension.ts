@@ -1,26 +1,21 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import { TestCase } from './test';
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "chelate1118" is now active!');
-
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('chelate1118.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from OJ-With!');
+	
+	let submitAction = vscode.commands.registerCommand('chelate1118.oj-with.submit', () => {
+		vscode.window.showInformationMessage('Code Submitted');
 	});
 
-	context.subscriptions.push(disposable);
+	let testRun = vscode.commands.registerCommand('chelate1118.oj-with.test', () => {
+		vscode.window.showInformationMessage('testing start...');
+		let [_x, y, _z] = new TestCase('10\n', '10').test('test.cpp');
+		vscode.window.showInformationMessage(y);
+	})
+
+	context.subscriptions.push(submitAction, testRun);
 }
 
-// This method is called when your extension is deactivated
 export function deactivate() {}

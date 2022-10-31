@@ -5,6 +5,7 @@
     "editor.fontSize": 16,
     "editor.lineHeight": 1.8,
     "terminal.integrated.fontSize": 16,
+    "workbench.colorTheme": "Jetbrains Fleet",
     "files.exclude": {
         "out": false // set this to true to hide the "out" folder with the compiled JS files
     },

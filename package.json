@@ -1,8 +1,9 @@
 {
-  "name": "chelate1118",
+  "name": "chelate1118.oj-with",
   "displayName": "OJ-With",
   "description": "Visual Studio Code plugin supports Online Judge",
   "version": "0.0.1",
+  "repository": "https://github.com/chelate1118/oj-with-vsc",
   "engines": {
     "vscode": "^1.72.0"
   },
@@ -10,16 +11,35 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:chelate1118.helloWorld"
+    "onCommand:chelate1118.oj-with.submit",
+    "onCommand:chelate1118.oj-with.test"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "chelate1118.helloWorld",
-        "title": "Hello World"
+        "command": "chelate1118.oj-with.submit",
+        "title": "Submit Code",
+        "icon": "$(check)"
+      },
+      {
+        "command": "chelate1118.oj-with.test",
+        "title": "Test Code",
+        "icon": "$(run-all)"
       }
-    ]
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "command": "chelate1118.oj-with.submit",
+          "group": "navigation"
+        },
+        {
+          "command": "chelate1118.oj-with.test",
+          "group": "navigation"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
