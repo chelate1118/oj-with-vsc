@@ -13,14 +13,6 @@ if (vscode.workspace.workspaceFolders == undefined) {
     binaryPath = workspacePath + '/exe'
 }
 
-enum Result {
-    RE,
-    CE,
-    TLE,
-    WA,
-    AC
-}
-
 export class TestCase {
     input: string
     output: string
@@ -45,7 +37,7 @@ export class TestCase {
             vscode.window.showInformationMessage('finish test');
         }
         else {
-            vscode.window.showWarningMessage('test failed');
+            vscode.window.showWarningMessage('test failed', );
         }
     }
 }

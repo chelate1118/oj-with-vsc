@@ -1,7 +1,8 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
-import { TestCase } from './test';
+import { TestCase } from './test-case/test';
+import { SampleSerializer } from './test-case/case-viewer';
 
 export function activate(context: vscode.ExtensionContext) {
 	
@@ -14,7 +15,14 @@ export function activate(context: vscode.ExtensionContext) {
 		await new TestCase('10\n', '10\nHello, Worl!').test('test.cpp');
 	})
 
-	context.subscriptions.push(submitAction, testRun);
+	let testCaseViewerNotebook = vscode.workspace.registerNotebookSerializer(
+		'test-case-view', new SampleSerializer());
+
+	context.subscriptions.push(
+		submitAction,
+		testRun,
+		testCaseViewerNotebook
+	);
 }
 
 export function deactivate() {}

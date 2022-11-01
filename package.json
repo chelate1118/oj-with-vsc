@@ -12,10 +12,23 @@
   ],
   "activationEvents": [
     "onCommand:chelate1118.oj-with.submit",
-    "onCommand:chelate1118.oj-with.test"
+    "onCommand:chelate1118.oj-with.test",
+    "onNotebook:test-case-view"
   ],
   "main": "./out/extension.js",
   "contributes": {
+    "notebooks": [
+      {
+        "id": "test-case-view",
+        "type": "test-case-view",
+        "displayName": "Test Case",
+        "selector": [
+          {
+            "filenamePattern": "*.ojw"
+          }
+        ]
+      }
+    ],
     "commands": [
       {
         "command": "chelate1118.oj-with.submit",
