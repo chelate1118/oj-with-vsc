@@ -17,6 +17,20 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
+    "languages": [
+      {
+        "id": "Test Case",
+        "aliases": ["Test Case"],
+        "extensions": [
+          ".test",
+          ".ojw"
+        ],
+        "icon": {
+          "light": "./resources/ojw-light.svg",
+          "dark": "./resources/ojw-dark.svg"
+        }
+      }
+    ],
     "notebooks": [
       {
         "id": "test-case-view",
