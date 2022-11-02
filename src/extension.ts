@@ -5,7 +5,8 @@ import { TestCase } from './test-case/test';
 import { SampleSerializer } from './test-case/case-viewer';
 
 export function activate(context: vscode.ExtensionContext) {
-	
+	require('./test-case/language')
+
 	let submitAction = vscode.commands.registerCommand('chelate1118.oj-with.submit', () => {
 		vscode.window.showInformationMessage('Code Submitted');
 	});

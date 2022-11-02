@@ -1,22 +1,41 @@
 import * as vscode from 'vscode'
 
-const tokenTypes = ['class', 'interface', 'enum', 'function', 'variable'];
-const tokenModifiers = ['declaration', 'documentation'];
+const tokenTypes = ['input', 'output', 'divider'];
+const tokenModifiers = ['input', 'output'];
 const legend = new vscode.SemanticTokensLegend(tokenTypes, tokenModifiers);
+
+const divider = '=='
 
 const provider: vscode.DocumentSemanticTokensProvider = {
     provideDocumentSemanticTokens(
       document: vscode.TextDocument
     ): vscode.ProviderResult<vscode.SemanticTokens> {
-      // analyze the document and return semantic tokens
-  
+      
+      const lineCount = document.lineCount;
+      
+      let diveder_line = lineCount;
+
+      for (let i = 0; i < lineCount; i++) {
+        const element = document.lineAt(i);
+        if (element.text == divider) {
+          diveder_line = i;
+          break;
+        }
+      }
+
       const tokensBuilder = new vscode.SemanticTokensBuilder(legend);
-      // on line 1, characters 1-5 are a class declaration
+      
       tokensBuilder.push(
-        new vscode.Range(new vscode.Position(1, 1), new vscode.Position(1, 5)),
-        'class',
-        ['declaration']
+        new vscode.Range(
+          new vscode.Position(0, 0),
+          document.lineAt(diveder_line-1).range.end
+        ),
+        'input',
+        ['output']
       );
+
+      console.log('called');
+
       return tokensBuilder.build();
     }
 };
