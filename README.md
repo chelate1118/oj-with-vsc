@@ -1,6 +1,12 @@
-# chelate1118 README
+# OJ With : Plugin Project for Problem Solving
 
-This is the README for your extension "chelate1118". After writing up a brief description, we recommend including the following sections.
+**OJ With** is a plugin for Visual Studio Code for problem-solving and supports online judges such as BOJ, Codeforces, and AtCoder.
+Go to the 'main' branch to see the source code.
+
+## Why "OJ With"?
+This plugin is designed for PS. With **OJ With**, you can see both problem and your code editor, test sample cases, and submit code with one click.
+
+\<TODO\>
 
 ## Features
 
