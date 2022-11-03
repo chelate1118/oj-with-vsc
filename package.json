@@ -21,7 +21,9 @@
     "languages": [
       {
         "id": "Test Case",
-        "aliases": ["Test Case"],
+        "aliases": [
+          "Test Case"
+        ],
         "extensions": [
           ".test",
           ".ojw"
@@ -68,14 +70,7 @@
         }
       ]
     },
-    "configurationDefaults": {
-      "editor.semanticTokenColorCustomizations": {
-        "rules": {
-          "input": "#ff0000",
-          "output": "#00ff00"
-        }
-      }
-    }
+    "configurationDefaults": {}
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",

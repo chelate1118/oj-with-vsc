@@ -27,17 +27,21 @@ export class TestCase {
             vscode.window.showErrorMessage('Any workspace isn\'t existing')
             return 'workspace error';
         }
-        
+
         let success = await compile(`${workspacePath}/${sourcePath}`, binaryPath);
         if (!success) return;
-        
+
         let [err, stdout, _stderr] = await executeBinary(binaryPath, this.input);
 
-        if(stdout == this.output) {
-            vscode.window.showInformationMessage('finish test');
+        if (stdout == this.output) {
+            vscode.window.showInformationMessage('Finish test');
         }
         else {
-            vscode.window.showWarningMessage('test failed', );
+            vscode.window.showWarningMessage('Test failed', 'Show Info')
+                .then(_selection => {
+                    vscode.window.showInformationMessage(`Correct Output: ${this.output}\n`
+                        + `Your Output: ${stdout}`, { modal: true })
+                });
         }
     }
 }
@@ -49,7 +53,7 @@ async function compile(sourcePath: string, binaryPath: string) {
     execFile('g++', [sourcePath, '-o', binaryPath], (
         err: string, stdout: string, stderr: string
     ) => {
-        if(err != null) {
+        if (err != null) {
             success = false;
             vscode.window.showErrorMessage('Compilation failed\n' + err);
         }

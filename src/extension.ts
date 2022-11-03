@@ -2,7 +2,8 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import { TestCase } from './test-case/test';
-import { SampleSerializer } from './test-case/case-viewer';
+import { TestCaseSerializer } from './test-case/case-viewer';
+import { NotebookController } from './test-case/language-controller';
 
 export function activate(context: vscode.ExtensionContext) {
 	require('./test-case/language')
@@ -13,11 +14,11 @@ export function activate(context: vscode.ExtensionContext) {
 
 	let testRun = vscode.commands.registerCommand('chelate1118.oj-with.test', async() => {
 		vscode.window.showInformationMessage('testing start...');
-		await new TestCase('10\n', '10\nHello, Worl!').test('test.cpp');
+		await new TestCase('', 'Hello, World!').test('test.cpp');
 	})
 
 	let testCaseViewerNotebook = vscode.workspace.registerNotebookSerializer(
-		'test-case-view', new SampleSerializer());
+		'test-case-view', new TestCaseSerializer());
 
 	context.subscriptions.push(
 		submitAction,

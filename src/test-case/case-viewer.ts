@@ -7,7 +7,7 @@ interface RawNotebookCell {
     kind: vscode.NotebookCellKind;
 }
 
-export class SampleSerializer implements vscode.NotebookSerializer {
+export class TestCaseSerializer implements vscode.NotebookSerializer {
     async deserializeNotebook(
         content: Uint8Array,
         _token: vscode.CancellationToken
@@ -22,7 +22,7 @@ export class SampleSerializer implements vscode.NotebookSerializer {
         }
 
         const cells = raw.map(
-            item => new vscode.NotebookCellData(item.kind, item.value, item.language)
+            item => new vscode.NotebookCellData(item.kind, item.value, 'Test Case')
         );
 
         return new vscode.NotebookData(cells);
@@ -37,7 +37,7 @@ export class SampleSerializer implements vscode.NotebookSerializer {
         for (const cell of data.cells) {
             contents.push({
                 kind: cell.kind,
-                language: cell.languageId,
+                language: 'Test Case',
                 value: cell.value
             });
         }
