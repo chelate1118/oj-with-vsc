@@ -1,10 +1,11 @@
 import * as vscode from 'vscode'
+import { TestCase } from './test';
 
-export class NotebookController {
-    readonly controllerId = 'my-notebook-controller-id';
-    readonly notebookType = 'my-notebook';
-    readonly label = 'My Notebook';
-    readonly supportedLanguages = ['python'];
+export class OjwController {
+    readonly controllerId = 'test-case-view';
+    readonly notebookType = 'test-case-view';
+    readonly label = 'Test Case View';
+    readonly supportedLanguages = ['Test Case'];
   
     private readonly _controller: vscode.NotebookController;
     private _executionOrder = 0;
@@ -19,6 +20,10 @@ export class NotebookController {
       this._controller.supportedLanguages = this.supportedLanguages;
       this._controller.supportsExecutionOrder = true;
       this._controller.executeHandler = this._execute.bind(this);
+    }
+
+    dispose(): void {
+      this._controller.dispose();
     }
   
     private _execute(
@@ -40,9 +45,14 @@ export class NotebookController {
   
       execution.replaceOutput([
         new vscode.NotebookCellOutput([
-          vscode.NotebookCellOutputItem.text('Dummy output text!')
+          vscode.NotebookCellOutputItem.text(
+            'test output!!'
+          )
         ])
       ]);
+
+      await new TestCase(cell.document).test('test.cpp')
+
       execution.end(true, Date.now());
     }
   }

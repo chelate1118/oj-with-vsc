@@ -3,10 +3,10 @@
 import * as vscode from 'vscode';
 import { TestCase } from './test-case/test';
 import { TestCaseSerializer } from './test-case/case-viewer';
-import { NotebookController } from './test-case/language-controller';
+import { OjwController } from './test-case/notebook-controller';
 
 export function activate(context: vscode.ExtensionContext) {
-	require('./test-case/language')
+	require('./test-case/test-case-token')
 
 	let submitAction = vscode.commands.registerCommand('chelate1118.oj-with.submit', () => {
 		vscode.window.showInformationMessage('Code Submitted');
@@ -14,7 +14,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	let testRun = vscode.commands.registerCommand('chelate1118.oj-with.test', async() => {
 		vscode.window.showInformationMessage('testing start...');
-		await new TestCase('', 'Hello, World!').test('test.cpp');
+		// await new TestCase().test('test.cpp');
 	})
 
 	let testCaseViewerNotebook = vscode.workspace.registerNotebookSerializer(
@@ -23,7 +23,8 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
 		submitAction,
 		testRun,
-		testCaseViewerNotebook
+		testCaseViewerNotebook,
+		new OjwController()
 	);
 }
 

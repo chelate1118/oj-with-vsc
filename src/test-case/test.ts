@@ -13,27 +13,43 @@ if (vscode.workspace.workspaceFolders == undefined) {
     binaryPath = workspacePath + '/exe'
 }
 
+const divider: string = require('../test-case/test-case-token').divider
+
 export class TestCase {
     input: string
     output: string
 
-    public constructor(input: string, output: string) {
-        this.input = input
-        this.output = output
+    public constructor(data: vscode.TextDocument) {
+        this.input = ''
+        this.output = ''
+        var isInput = true;
+
+        for (let i = 0; i < data.lineCount; i++) {
+            if (isInput && data.lineAt(i).text == divider) {
+                isInput = false;
+                continue;
+            }
+
+            if (isInput)
+                this.input += data.lineAt(i).text + '\n'
+            else {
+                this.output += data.lineAt(i).text + '\n'
+            }
+        }
     }
 
-    public async test(sourcePath: string) {
+    public async test(sourcePathWorkSpace: string) {
         if (vscode.workspace.workspaceFolders == undefined) {
             vscode.window.showErrorMessage('Any workspace isn\'t existing')
             return 'workspace error';
         }
 
-        let success = await compile(`${workspacePath}/${sourcePath}`, binaryPath);
+        let success = await compile(`${workspacePath}/${sourcePathWorkSpace}`, binaryPath);
         if (!success) return;
 
         let [err, stdout, _stderr] = await executeBinary(binaryPath, this.input);
 
-        if (stdout == this.output) {
+        if (isCorrectOutput(this.output, stdout!)) {
             vscode.window.showInformationMessage('Finish test');
         }
         else {
@@ -96,4 +112,20 @@ async function executeBinary(path: string, input: string) {
 
 function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function isCorrectOutput(ans: string, output: string) {
+    const ansWhiteSpace = ans.replace('\n', ' ')
+    const outputWhiteSpace = output.replace('\n', ' ')
+
+    var ansSp = ansWhiteSpace.split(' ');
+    var outputSp = outputWhiteSpace.split(' ');
+
+    ansSp = ansSp.filter(s => s.length > 0)
+    outputSp = outputSp.filter(s => s.length > 0)
+
+    console.log(ansSp)
+    console.log(outputSp)
+
+    return ansSp.length === outputSp.length && ansSp.every((val, ind) => val === outputSp[ind]);
 }

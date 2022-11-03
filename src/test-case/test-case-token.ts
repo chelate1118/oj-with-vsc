@@ -4,7 +4,7 @@ const tokenTypes = ['class', 'variable'];
 const tokenModifiers = ['input', 'output'];
 const legend = new vscode.SemanticTokensLegend(tokenTypes, tokenModifiers);
 
-const divider = '=='
+export const divider = '=='
 
 const provider: vscode.DocumentSemanticTokensProvider = {
   provideDocumentSemanticTokens(
@@ -18,7 +18,7 @@ const provider: vscode.DocumentSemanticTokensProvider = {
 
     for (let i = 0; i < lineCount; i++) {
       const element = document.lineAt(i);
-      if (element.text == divider) {
+      if (isInput && element.text == divider) {
         isInput = false;
         continue;
       }
@@ -34,8 +34,14 @@ const provider: vscode.DocumentSemanticTokensProvider = {
 };
 
 const selector = {
-  language: 'Test Case',
+  language: 'test-case',
   scheme: 'file'
 }
 
+const selectorNote: vscode.DocumentFilter = {
+  language: 'test-case',
+  notebookType: 'test-case-view',
+}
+
 vscode.languages.registerDocumentSemanticTokensProvider(selector, provider, legend)
+vscode.languages.registerDocumentSemanticTokensProvider(selectorNote, provider, legend)

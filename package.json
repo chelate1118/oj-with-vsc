@@ -14,13 +14,16 @@
     "onCommand:chelate1118.oj-with.submit",
     "onCommand:chelate1118.oj-with.test",
     "onNotebook:test-case-view",
-    "onLanguage:Test Case"
+    "onLanguage:test-case"
+  ],
+  "keywords": [
+    "notebookRenderer"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "languages": [
       {
-        "id": "Test Case",
+        "id": "test-case",
         "aliases": [
           "Test Case"
         ],
@@ -44,6 +47,16 @@
             "filenamePattern": "*.ojw"
           }
         ]
+      }
+    ],
+    "notebookRenderer": [
+      {
+        "id": "test-output",
+        "displayName": "Test Result",
+        "mimeTypes": [
+          "oj-with/test-output"
+        ],
+        "entrypoint": "./out/notebook-renderer.js"
       }
     ],
     "commands": [
