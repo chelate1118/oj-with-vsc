@@ -3,15 +3,8 @@ import * as vscode from 'vscode'
 const execFile = require('child_process').execFile;
 const stream = require('stream');
 
-var workspacePath: string;
-var binaryPath: string;
-
-if (vscode.workspace.workspaceFolders == undefined) {
-    vscode.window.showErrorMessage('Any workspace isn\'t existing')
-} else {
-    workspacePath = vscode.workspace.workspaceFolders[0].uri.path
-    binaryPath = workspacePath + '/exe'
-}
+const workspacePath: string = vscode.workspace.workspaceFolders![0].uri.path;
+const binaryPath: string = workspacePath + '/exe';
 
 const divider: string = require('../test-case/test-case-token').divider
 
@@ -49,8 +42,9 @@ export class TestCase {
 
         let [err, stdout, _stderr] = await executeBinary(binaryPath, this.input);
 
-        if (isCorrectOutput(this.output, stdout!)) {
+        if (isCorrectOutput(this.output, stdout!) || this.output === '') {
             vscode.window.showInformationMessage('Finish test');
+            return stdout;
         }
         else {
             vscode.window.showWarningMessage('Test failed', 'Show Info')
@@ -58,6 +52,7 @@ export class TestCase {
                     vscode.window.showInformationMessage(`Correct Output: ${this.output}\n`
                         + `Your Output: ${stdout}`, { modal: true })
                 });
+            return stdout;
         }
     }
 }
