@@ -5,7 +5,7 @@ export class OjwController {
     readonly controllerId = 'test-case-view';
     readonly notebookType = 'test-case-view';
     readonly label = 'Test Case View';
-    readonly supportedLanguages = ['Test Case'];
+    readonly supportedLanguages = ['Test Case', 'Markdown'];
   
     private readonly _controller: vscode.NotebookController;
     private _executionOrder = 0;

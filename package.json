@@ -13,6 +13,7 @@
   "activationEvents": [
     "onCommand:chelate1118.oj-with.submit",
     "onCommand:chelate1118.oj-with.test",
+    "onCommand:chelate1118.oj-with.problem",
     "onNotebook:test-case-view",
     "onLanguage:test-case"
   ],
@@ -69,6 +70,11 @@
         "command": "chelate1118.oj-with.test",
         "title": "Test Code",
         "icon": "$(run-all)"
+      },
+      {
+        "command": "chelate1118.oj-with.problem",
+        "title": "Select Problem",
+        "icon": "$(pencil)"
       }
     ],
     "menus": {
@@ -79,6 +85,10 @@
         },
         {
           "command": "chelate1118.oj-with.test",
+          "group": "navigation"
+        },
+        {
+          "command": "chelate1118.oj-with.problem",
           "group": "navigation"
         }
       ]
@@ -94,16 +104,16 @@
     "test": "node ./out/test/runTest.js"
   },
   "devDependencies": {
-    "@types/vscode": "^1.72.0",
     "@types/glob": "^8.0.0",
     "@types/mocha": "^10.0.0",
     "@types/node": "16.x",
+    "@types/vscode": "^1.72.0",
     "@typescript-eslint/eslint-plugin": "^5.38.1",
     "@typescript-eslint/parser": "^5.38.1",
+    "@vscode/test-electron": "^2.1.5",
     "eslint": "^8.24.0",
     "glob": "^8.0.3",
     "mocha": "^10.0.0",
-    "typescript": "^4.8.4",
-    "@vscode/test-electron": "^2.1.5"
+    "typescript": "^4.8.4"
   }
 }
