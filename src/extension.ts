@@ -24,8 +24,6 @@ export function activate(context: vscode.ExtensionContext) {
 			onDidSelectItem: item => selectJudge = item.toString()
 		})
 		
-		console.log(selectJudge)
-
 		if (selectJudge === "Codeforces") {
 			CodeforcesProblem.pickProblem()
 		}

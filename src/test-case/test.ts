@@ -50,8 +50,7 @@ export class TestCase {
         input: string,
         execution: vscode.NotebookCellExecution
     ) {
-
-        execFile('g++', [sourcePath, '-o', binaryPath], (
+        execFile('g++', [sourcePath, '-DONLINE_JUDGE', '-o', binaryPath], (
             err: Error, stdout: string, stderr: string
         ) => {
             if (err != null) {
@@ -106,8 +105,8 @@ export class TestCase {
 
     private isCorrectOutput(ans: string) {
         if (this.output === '') return true;
-        const ansWhiteSpace = ans.replace('\n', ' ')
-        const outputWhiteSpace = this.output.replace('\n', ' ')
+        const ansWhiteSpace = ans.replaceAll('\n', ' ')
+        const outputWhiteSpace = this.output.replaceAll('\n', ' ')
 
         var ansSp = ansWhiteSpace.split(' ');
         var outputSp = outputWhiteSpace.split(' ');
