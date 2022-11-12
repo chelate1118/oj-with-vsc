@@ -1,4 +1,6 @@
 import { IncomingMessage } from 'http'
+import { TestCase } from '../test-case/test'
+import { parse } from 'node-html-parser'
 import * as vscode from 'vscode'
 
 const https = require('node:https');
@@ -26,7 +28,7 @@ export class CodeforcesProblem extends Problem {
         this.quickPickContest()
     }
 
-    private static async quickPickContest() {
+    private static quickPickContest() {
         var array = new Array<string>();
 
         const url = `https://codeforces.com/api/contest.list`
@@ -43,7 +45,7 @@ export class CodeforcesProblem extends Problem {
                 }[] = JSON.parse(body).result
 
                 resultArray.forEach(result => {
-                    if (result.phase !== "BEFORE")
+                    if (result.phase != "BEFORE")
                         array.push(`[${result.id}] ${result.name}`)
                 });
 
@@ -74,19 +76,48 @@ export class CodeforcesProblem extends Problem {
                 var problemArray: {
                     [element: string]: string|number,
                 }[] = JSON.parse(body).result.problems
-
-                console.log(contestID);
-                console.log(problemArray)
                 
                 problemArray.forEach(problem => {
-                    if (problem.contestID == contestID) {
-                        array.push(`[${problem.index}] ${problem.name}(${problem.points})`);
+                    if (problem.contestId == contestID) {
+                        array.push(`[${problem.index}] ${problem.name} (${problem.points})`);
                     }
                 })
+                // TODO: If Running
 
-                console.log(array)
+                array.sort();
+
+                var selectItem = ''
+                await vscode.window.showQuickPick(array, {
+                    onDidSelectItem: item => selectItem = item.toString()
+                });
+
+                var selectProblem = selectItem.split(']')[0].replace('[', '')
+
+                this.readProblemData(contestID, selectProblem)
             })
         })
+    }
+
+    private static readProblemData(contestID: number, problem: string) {
+        const url1 = `https://codeforces.com/contest/${contestID}/problem/${problem}`
+        const url2 = `https://m1.codeforces.com/${contestID}/problem/${problem}`
+
+        console.log(url1);
+        
+        var body = ''
+        https.get(url1, (responce: IncomingMessage) => {
+            responce.on('data', d => body += d)
+
+            responce.on('end', () => {
+                let testCases = this.parseProblemData(body)
+                // Notebook.setTestCases(testCases);
+            })
+        })
+    }
+
+    private static parseProblemData(body: string): TestCase[] {
+        console.log(parse(body).toString());
+        return Array.of();
     }
 }
 
@@ -110,15 +141,11 @@ export class BOJProblem extends Problem {
                 })
 
                 responce.on('end', () => {
-                    console.log(body);
-                    console.log(JSON.parse(body).items)
                     if (JSON.parse(body).items.length == 0) {
                         maxPage = Math.min(maxPage, i);
                     }
                 })
             })
         }
-
-        console.log(maxPage);
     }
 }
