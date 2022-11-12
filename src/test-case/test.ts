@@ -31,96 +31,90 @@ export class TestCase {
         }
     }
 
-    public async test(sourcePathWorkSpace: string) {
+    public async test(
+        sourcePathWorkSpace: string,
+        execution: vscode.NotebookCellExecution
+    ) {
         if (vscode.workspace.workspaceFolders == undefined) {
             vscode.window.showErrorMessage('Any workspace isn\'t existing')
             return 'workspace error';
         }
 
-        let success = await compile(`${workspacePath}/${sourcePathWorkSpace}`, binaryPath);
-        if (!success) return;
-
-        let [err, stdout, _stderr] = await executeBinary(binaryPath, this.input);
-
-        if (isCorrectOutput(this.output, stdout!) || this.output === '') {
-            vscode.window.showInformationMessage('Finish test');
-            return stdout;
-        }
-        else {
-            vscode.window.showWarningMessage('Test failed', 'Show Info')
-                .then(_selection => {
-                    vscode.window.showInformationMessage(`Correct Output: ${this.output}\n`
-                        + `Your Output: ${stdout}`, { modal: true })
-                });
-            return stdout;
-        }
-    }
-}
-
-async function compile(sourcePath: string, binaryPath: string) {
-    var finished = false;
-    var success = true;
-
-    execFile('g++', [sourcePath, '-o', binaryPath], (
-        err: string, stdout: string, stderr: string
-    ) => {
-        if (err != null) {
-            success = false;
-            vscode.window.showErrorMessage('Compilation failed\n' + err);
-        }
-        finished = true;
-    });
-
-    while (!finished) {
-        console.log('wait compile');
-        await sleep(100);
+        const sourcePath = `${workspacePath}/${sourcePathWorkSpace}`;
+        this.compileAndRun(sourcePath, binaryPath, this.input, execution);
     }
 
-    return success;
-}
+    private compileAndRun(
+        sourcePath: string,
+        binaryPath: string,
+        input: string,
+        execution: vscode.NotebookCellExecution
+    ) {
 
-async function executeBinary(path: string, input: string) {
-    var finished = false;
-    var err, stdout, stderr;
-
-    const child_process = execFile(`${path}`, (
-        error: string, stdoutput: string, stderror: string
-    ) => {
-        err = error;
-        stdout = stdoutput;
-        stderr = stderror;
-        finished = true;
-    })
-
-    const stdinStream = new stream.Readable();
-    stdinStream.push(input);
-    stdinStream.push(null);
-    stdinStream.pipe(child_process.stdin);
-
-    while (!finished) {
-        console.log('wait executing');
-        await sleep(100);
+        execFile('g++', [sourcePath, '-o', binaryPath], (
+            err: Error, stdout: string, stderr: string
+        ) => {
+            if (err != null) {
+                execution.start();
+                execution.replaceOutput([
+                    new vscode.NotebookCellOutput([
+                        vscode.NotebookCellOutputItem.text(
+                            err.message
+                        )
+                    ])
+                ])
+                execution.end(false);
+            } else {
+                this.executeBinary(binaryPath, input, execution)
+            }
+        });
     }
 
-    return [err, stdout, stderr];
-}
+    private executeBinary(
+        path: string,
+        input: string,
+        execution: vscode.NotebookCellExecution
+    ) {
+        execution.start(Date.now());
 
-function sleep(ms: number) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
+        const child_process = execFile(`${path}`, (
+            err: Error, stdout: string, stderr: string
+        ) => {
+            if (err != null) {
+                execution.replaceOutput([
+                    new vscode.NotebookCellOutput([
+                        vscode.NotebookCellOutputItem.error(err)
+                    ])
+                ])
+                execution.end(false, Date.now());
+            } else {
+                execution.replaceOutput([
+                    new vscode.NotebookCellOutput([
+                        vscode.NotebookCellOutputItem.text(stdout)
+                    ])
+                ])
 
-function isCorrectOutput(ans: string, output: string) {
-    const ansWhiteSpace = ans.replace('\n', ' ')
-    const outputWhiteSpace = output.replace('\n', ' ')
+                execution.end(this.isCorrectOutput(stdout), Date.now())
+            }
+        })
 
-    var ansSp = ansWhiteSpace.split(' ');
-    var outputSp = outputWhiteSpace.split(' ');
+        const stdinStream = new stream.Readable();
+        stdinStream.push(input);
+        stdinStream.push(null);
+        stdinStream.pipe(child_process.stdin);
+    }
 
-    ansSp = ansSp.filter(s => s.length > 0)
-    outputSp = outputSp.filter(s => s.length > 0)
+    private isCorrectOutput(ans: string) {
+        if (this.output === '') return true;
+        const ansWhiteSpace = ans.replace('\n', ' ')
+        const outputWhiteSpace = this.output.replace('\n', ' ')
 
-    console.log(ansSp)
-    console.log(outputSp)
+        var ansSp = ansWhiteSpace.split(' ');
+        var outputSp = outputWhiteSpace.split(' ');
 
-    return ansSp.length === outputSp.length && ansSp.every((val, ind) => val === outputSp[ind]);
+        ansSp = ansSp.filter(s => s.length > 0)
+        outputSp = outputSp.filter(s => s.length > 0)
+
+        return ansSp.length === outputSp.length && ansSp.every((val, ind) => val === outputSp[ind]);
+    }
 }

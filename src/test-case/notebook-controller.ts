@@ -39,30 +39,8 @@ export class OjwController {
     private async _doExecution(cell: vscode.NotebookCell): Promise<void> {
       const execution = this._controller.createNotebookCellExecution(cell);
       execution.executionOrder = ++this._executionOrder;
-      execution.start(Date.now());
       
       const tc = new TestCase(cell.document)
-      const stdout: string = (await tc.test('test.cpp'))!
-
-      if (tc.output === '') {
-        execution.replaceOutput([
-          new vscode.NotebookCellOutput([
-            vscode.NotebookCellOutputItem.text(
-              stdout
-            )
-          ])
-        ]);
-      }
-      else {
-        execution.replaceOutput([
-          new vscode.NotebookCellOutput([
-            vscode.NotebookCellOutputItem.text(
-              `Answer:${tc.output}\nOutput:${stdout}`
-            )
-          ])
-        ]);
-      }
-
-      execution.end(true, Date.now());
+      tc.test('test.cpp', execution)
     }
   }
