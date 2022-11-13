@@ -12,8 +12,8 @@
   ],
   "activationEvents": [
     "onCommand:chelate1118.oj-with.submit",
-    "onCommand:chelate1118.oj-with.test",
     "onCommand:chelate1118.oj-with.problem",
+    "onCommand:chelate1118.oj-with.select-source",
     "onNotebook:test-case-view",
     "onLanguage:test-case"
   ],
@@ -29,7 +29,6 @@
           "Test Case"
         ],
         "extensions": [
-          ".test",
           ".ojw"
         ],
         "icon": {
@@ -67,9 +66,9 @@
         "icon": "$(check)"
       },
       {
-        "command": "chelate1118.oj-with.test",
-        "title": "Test Code",
-        "icon": "$(run-all)"
+        "command": "chelate1118.oj-with.select-source",
+        "title": "Choose Source File",
+        "icon": "$(code)"
       },
       {
         "command": "chelate1118.oj-with.problem",
@@ -84,12 +83,14 @@
           "group": "navigation"
         },
         {
-          "command": "chelate1118.oj-with.test",
-          "group": "navigation"
+          "command": "chelate1118.oj-with.problem",
+          "group": "navigation",
+          "when": "resourceExtname == .ojw"
         },
         {
-          "command": "chelate1118.oj-with.problem",
-          "group": "navigation"
+          "command": "chelate1118.oj-with.select-source",
+          "group": "navigation",
+          "when": "resourceExtname == .ojw"
         }
       ]
     },

@@ -1,32 +1,32 @@
 import * as vscode from 'vscode'
+import { currentSource } from '../files/source-path';
 import { TestCase } from './test';
 
 export class OjwController {
   readonly controllerId = 'test-case-view';
   readonly notebookType = 'test-case-view';
-  readonly label = 'Test Case View';
-  readonly supportedLanguages = ['Test Case', 'Markdown'];
+  readonly supportedLanguages = ['Test Case'];
 
-  private readonly _controller: vscode.NotebookController;
+  readonly controller: vscode.NotebookController;
   private _executionOrder = 0;
 
   constructor() {
-    this._controller = vscode.notebooks.createNotebookController(
+    this.controller = vscode.notebooks.createNotebookController(
       this.controllerId,
       this.notebookType,
-      this.label
+      currentSource
     );
 
-    this._controller.supportedLanguages = this.supportedLanguages;
-    this._controller.supportsExecutionOrder = true;
-    this._controller.executeHandler = this._execute.bind(this);
+    this.controller.supportedLanguages = this.supportedLanguages;
+    this.controller.supportsExecutionOrder = true;
+    this.controller.executeHandler = this.execute.bind(this);
   }
 
   dispose(): void {
-    this._controller.dispose();
+    this.controller.dispose();
   }
 
-  private _execute(
+  execute(
     cells: vscode.NotebookCell[],
     _notebook: vscode.NotebookDocument,
     _controller: vscode.NotebookController
@@ -37,10 +37,10 @@ export class OjwController {
   }
 
   private async _doExecution(cell: vscode.NotebookCell): Promise<void> {
-    const execution = this._controller.createNotebookCellExecution(cell);
+    const execution = this.controller.createNotebookCellExecution(cell);
     execution.executionOrder = ++this._executionOrder;
     
     const tc = new TestCase(cell.document)
-    tc.test('main.cpp', execution)
+    tc.test(currentSource, execution)
   }
 }

@@ -1,20 +1,20 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import { currentSource, setCurrentSource } from './files/source-path';
 import { BOJProblem, CodeforcesProblem } from './online-judge/problem';
 import { TestCaseSerializer } from './test-case/case-viewer';
 import { OjwController } from './test-case/notebook-controller';
 
 export function activate(context: vscode.ExtensionContext) {
-	require('./test-case/test-case-token')
+	const ojwController = new OjwController();
 
 	let submitAction = vscode.commands.registerCommand('chelate1118.oj-with.submit', () => {
 		vscode.window.showInformationMessage('Code Submitted');
 	});
 
-	let testRun = vscode.commands.registerCommand('chelate1118.oj-with.test', async() => {
-		vscode.window.showInformationMessage('testing start...');
-		// await new TestCase().test('test.cpp');
+	let selectSource = vscode.commands.registerCommand('chelate1118.oj-with.select-source', async() => {
+		ojwController.controller.label = await setCurrentSource();
 	})
 
 	let selectProblem = vscode.commands.registerCommand('chelate1118.oj-with.problem', async() => {
@@ -34,9 +34,9 @@ export function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(
 		submitAction,
-		testRun,
+		selectSource,
 		testCaseViewerNotebook,
-		new OjwController(),
+		ojwController,
 		selectProblem
 	);
 }

@@ -3,7 +3,7 @@ import * as vscode from 'vscode'
 const execFile = require('child_process').execFile;
 const stream = require('stream');
 
-const workspacePath: string = vscode.workspace.workspaceFolders![0].uri.path;
+export const workspacePath: string = vscode.workspace.workspaceFolders![0].uri.path;
 const binaryPath: string = workspacePath + '/exe';
 
 const divider: string = require('../test-case/test-case-token').divider
@@ -40,7 +40,7 @@ export class TestCase {
             return 'workspace error';
         }
 
-        const sourcePath = `${workspacePath}/${sourcePathWorkSpace}`;
+        const sourcePath = `${workspacePath}${sourcePathWorkSpace}`;
         this.compileAndRun(sourcePath, binaryPath, this.input, execution);
     }
 
@@ -79,13 +79,14 @@ export class TestCase {
         const child_process = execFile(`${path}`, (
             err: Error, stdout: string, stderr: string
         ) => {
+            let finishTime = Date.now();
             if (err != null) {
                 execution.replaceOutput([
                     new vscode.NotebookCellOutput([
                         vscode.NotebookCellOutputItem.error(err)
                     ])
                 ])
-                execution.end(false, Date.now());
+                execution.end(false, finishTime);
             } else {
                 execution.replaceOutput([
                     new vscode.NotebookCellOutput([
@@ -93,7 +94,7 @@ export class TestCase {
                     ])
                 ])
 
-                execution.end(this.isCorrectOutput(stdout), Date.now())
+                execution.end(this.isCorrectOutput(stdout), finishTime)
             }
         })
 

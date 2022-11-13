@@ -33,15 +33,9 @@ const provider: vscode.DocumentSemanticTokensProvider = {
   }
 };
 
-const selector = {
-  language: 'test-case',
-  scheme: 'file'
-}
-
 const selectorNote: vscode.DocumentFilter = {
   language: 'test-case',
   notebookType: 'test-case-view',
 }
 
-vscode.languages.registerDocumentSemanticTokensProvider(selector, provider, legend)
 vscode.languages.registerDocumentSemanticTokensProvider(selectorNote, provider, legend)
