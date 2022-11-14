@@ -1,77 +1,30 @@
 # OJ With : Plugin Project for Problem Solving
 
 **OJ With** is a plugin for Visual Studio Code for problem-solving and supports online judges such as BOJ, Codeforces, and AtCoder.
-Go to the 'main' branch to see the source code.
 
 ## Why "OJ With"?
-This plugin is designed for PS. With **OJ With**, you can see both problem and your code editor, test sample cases, and submit code with one click.
+This plugin is designed for PS. With **OJ With**, you can test your code automatically.
 
-\<TODO\>
+## How to use
 
-## Features
+Create the file with extension '.ojw'. Then you will see the notebook. You can add a test case for each cell. Write down the input, '==', and the output. If you want, you could 
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+If you press the 'run' button on the left side of the cell, your code will be executed, and your input will be as stdin. The extension then automatically detects the output and compares it to the output which user defined.
 
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+When you press the 'run all' button on the top side of the screen, all test cases will be executed. The compilation runs only once.
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+You need g++ compiler for use this extension. To make sure that the g++ compiler is installed on your computer, type following line.
+
+<code>g++ --version</code>
+
+If you see 'g++ command not found', then you have to install g++ compiler and set to your PATH variable.
 
 ## Extension Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+You can customize separator which divides input and output.
 
 For example:
 
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+* `"oj-with.separator": "--"`
