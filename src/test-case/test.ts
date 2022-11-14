@@ -1,10 +1,12 @@
 import * as vscode from 'vscode'
+import { ojwController } from '../extension';
+import { queue } from './notebook-controller';
 
 const execFile = require('child_process').execFile;
 const stream = require('stream');
 
 export const workspacePath: string = vscode.workspace.workspaceFolders![0].uri.path;
-const binaryPath: string = workspacePath + '/exe';
+const binaryPath: string = workspacePath + '/.ojw_exe';
 
 const divider: string = require('../test-case/test-case-token').divider
 
@@ -33,7 +35,8 @@ export class TestCase {
 
     public async test(
         sourcePathWorkSpace: string,
-        execution: vscode.NotebookCellExecution
+        execution: vscode.NotebookCellExecution,
+        compile: boolean
     ) {
         if (vscode.workspace.workspaceFolders == undefined) {
             vscode.window.showErrorMessage('Any workspace isn\'t existing')
@@ -41,17 +44,22 @@ export class TestCase {
         }
 
         const sourcePath = `${workspacePath}${sourcePathWorkSpace}`;
-        this.compileAndRun(sourcePath, binaryPath, this.input, execution);
+        this.compileAndRun(sourcePath, binaryPath, this.input, execution, compile);
     }
 
     private compileAndRun(
         sourcePath: string,
         binaryPath: string,
         input: string,
-        execution: vscode.NotebookCellExecution
+        execution: vscode.NotebookCellExecution,
+        compile: boolean
     ) {
+        if (!compile) {
+            this.executeBinary(binaryPath, input, execution);
+            return;
+        }
         execFile('g++', [sourcePath, '-DONLINE_JUDGE', '-o', binaryPath], (
-            err: Error, stdout: string, stderr: string
+            err: Error, _stdout: string, _stderr: string
         ) => {
             if (err != null) {
                 execution.start();
@@ -62,6 +70,7 @@ export class TestCase {
                         )
                     ])
                 ])
+                queue.length = 0;
                 execution.end(false);
             } else {
                 this.executeBinary(binaryPath, input, execution)
@@ -87,6 +96,9 @@ export class TestCase {
                     ])
                 ])
                 execution.end(false, finishTime);
+                queue.shift();
+                if (queue.length > 0)
+                    ojwController._doExecution(queue[0]);
             } else {
                 execution.replaceOutput([
                     new vscode.NotebookCellOutput([
@@ -95,6 +107,9 @@ export class TestCase {
                 ])
 
                 execution.end(this.isCorrectOutput(stdout), finishTime)
+                queue.shift();
+                if (queue.length > 0)
+                    ojwController._doExecution(queue[0]);
             }
         })
 

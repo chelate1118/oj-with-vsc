@@ -11,8 +11,6 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:chelate1118.oj-with.submit",
-    "onCommand:chelate1118.oj-with.problem",
     "onCommand:chelate1118.oj-with.select-source",
     "onNotebook:test-case-view",
     "onLanguage:test-case"
@@ -61,32 +59,13 @@
     ],
     "commands": [
       {
-        "command": "chelate1118.oj-with.submit",
-        "title": "Submit Code",
-        "icon": "$(check)"
-      },
-      {
         "command": "chelate1118.oj-with.select-source",
         "title": "Choose Source File",
         "icon": "$(code)"
-      },
-      {
-        "command": "chelate1118.oj-with.problem",
-        "title": "Select Problem",
-        "icon": "$(pencil)"
       }
     ],
     "menus": {
       "editor/title": [
-        {
-          "command": "chelate1118.oj-with.submit",
-          "group": "navigation"
-        },
-        {
-          "command": "chelate1118.oj-with.problem",
-          "group": "navigation",
-          "when": "resourceExtname == .ojw"
-        },
         {
           "command": "chelate1118.oj-with.select-source",
           "group": "navigation",

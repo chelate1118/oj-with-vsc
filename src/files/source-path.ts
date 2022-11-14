@@ -14,7 +14,8 @@ export async function setCurrentSource() {
     await vscode.window.showQuickPick(sourcesPath, {
         onDidSelectItem: item => {
             currentSource = item.toString()
-        }
+        },
+        placeHolder: "Select source file to run"
     });
     
     return currentSource;
