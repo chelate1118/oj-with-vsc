@@ -1,14 +1,13 @@
 import * as vscode from 'vscode'
 import { ojwController } from '../extension';
 import { queue } from './notebook-controller';
+import { Language } from './test-case-token';
 
 const execFile = require('child_process').execFile;
 const stream = require('stream');
 
 export const workspacePath: string = vscode.workspace.workspaceFolders![0].uri.path;
 const binaryPath: string = workspacePath + '/.ojw_exe';
-
-const divider: string = require('../test-case/test-case-token').divider
 
 export class TestCase {
     input: string
@@ -20,7 +19,7 @@ export class TestCase {
         var isInput = true;
 
         for (let i = 0; i < data.lineCount; i++) {
-            if (isInput && data.lineAt(i).text == divider) {
+            if (isInput && data.lineAt(i).text == Language.divider) {
                 isInput = false;
                 continue;
             }

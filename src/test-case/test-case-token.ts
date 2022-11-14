@@ -4,7 +4,11 @@ const tokenTypes = ['class', 'variable'];
 const tokenModifiers = ['input', 'output'];
 const legend = new vscode.SemanticTokensLegend(tokenTypes, tokenModifiers);
 
-export const divider = '=='
+export class Language {
+  static get divider(): string {
+    return vscode.workspace.getConfiguration('oj-with').get('separator')!
+  }
+}
 
 const provider: vscode.DocumentSemanticTokensProvider = {
   provideDocumentSemanticTokens(
@@ -18,7 +22,7 @@ const provider: vscode.DocumentSemanticTokensProvider = {
 
     for (let i = 0; i < lineCount; i++) {
       const element = document.lineAt(i);
-      if (isInput && element.text == divider) {
+      if (isInput && element.text == Language.divider) {
         isInput = false;
         continue;
       }

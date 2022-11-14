@@ -73,7 +73,14 @@
         }
       ]
     },
-    "configurationDefaults": {}
+    "configuration": {
+      "properties": {
+        "oj-with.separator": {
+          "type": ["string"],
+          "default": "=="
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
