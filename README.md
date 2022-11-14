@@ -7,7 +7,7 @@ This plugin is designed for PS. With **OJ With**, you can test your code automat
 
 ## How to use
 
-Create the file with extension '.ojw'. Then you will see the notebook. You can add a test case for each cell. Write down the input, '==', and the output. If you want, you could 
+Create the file with extension '.ojw'. Then you will see the notebook. You can add a test case for each cell. Write down the input, '==', and the output. If you want, you can leave the output blank.
 
 If you press the 'run' button on the left side of the cell, your code will be executed, and your input will be as stdin. The extension then automatically detects the output and compares it to the output which user defined.
 
