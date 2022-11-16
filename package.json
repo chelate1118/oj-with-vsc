@@ -1,0 +1,106 @@
+{
+  "name": "oj-with",
+  "publisher": "chelate1118",
+  "displayName": "OJ-With",
+  "description": "Visual Studio Code plugin supports Online Judge",
+  "version": "0.0.4",
+  "repository": "https://github.com/chelate1118/oj-with-vsc",
+  "engines": {
+    "vscode": "^1.72.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:chelate1118.oj-with.select-source",
+    "onNotebook:test-case-view",
+    "onLanguage:test-case"
+  ],
+  "keywords": [
+    "notebookRenderer"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "test-case",
+        "aliases": [
+          "Test Case"
+        ],
+        "extensions": [
+          ".ojw"
+        ]
+      }
+    ],
+    "notebooks": [
+      {
+        "id": "test-case-view",
+        "type": "test-case-view",
+        "displayName": "Test Case",
+        "selector": [
+          {
+            "filenamePattern": "*.ojw"
+          }
+        ]
+      }
+    ],
+    "notebookRenderer": [
+      {
+        "id": "test-output",
+        "displayName": "Test Result",
+        "mimeTypes": [
+          "oj-with/test-output"
+        ],
+        "entrypoint": "./out/notebook-renderer.js"
+      }
+    ],
+    "commands": [
+      {
+        "command": "chelate1118.oj-with.select-source",
+        "title": "Choose Source File",
+        "icon": "$(code)"
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "command": "chelate1118.oj-with.select-source",
+          "group": "navigation",
+          "when": "resourceExtname == .ojw"
+        }
+      ]
+    },
+    "configuration": {
+      "properties": {
+        "oj-with.separator": {
+          "type": [
+            "string"
+          ],
+          "default": "=="
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/glob": "^8.0.0",
+    "@types/mocha": "^10.0.0",
+    "@types/node": "16.x",
+    "@types/vscode": "^1.72.0",
+    "@typescript-eslint/eslint-plugin": "^5.38.1",
+    "@typescript-eslint/parser": "^5.38.1",
+    "@vscode/test-electron": "^2.1.5",
+    "eslint": "^8.24.0",
+    "glob": "^8.0.3",
+    "mocha": "^10.0.0",
+    "node-html-parser": "^6.1.1",
+    "typescript": "^4.8.4"
+  }
+}
