@@ -23,8 +23,8 @@ export class TestCaseSerializer implements vscode.NotebookSerializer {
         let raw: RawNotebookCell[];
         try {
             let notebookData: NotebookData = JSON.parse(contents);
-            raw = notebookData.data
-            setSourcePath(notebookData.sourcePath)
+            raw = notebookData.data;
+            setSourcePath(notebookData.sourcePath);
         } catch {
             raw = [];
         }
@@ -54,7 +54,7 @@ export class TestCaseSerializer implements vscode.NotebookSerializer {
         contents = {
             sourcePath: currentSource,
             data: cells
-        }
+        };
 
         return new TextEncoder().encode(JSON.stringify(contents));
     }

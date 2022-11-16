@@ -1,4 +1,4 @@
-import * as vscode from 'vscode'
+import * as vscode from 'vscode';
 import { currentSource } from '../files/source-path';
 import { TestCase } from './test';
 
@@ -33,8 +33,8 @@ export class OjwController {
     _notebook: vscode.NotebookDocument,
     _controller: vscode.NotebookController
   ): void {
-    if (cells.length == 0) return;
-    if (queue.length == 0) {
+    if (cells.length === 0) { return; }
+    if (queue.length === 0) {
       var first = true;
       for (let cell of cells) {
         queue.push([cell, first]);
@@ -54,7 +54,7 @@ export class OjwController {
     const execution = this.controller.createNotebookCellExecution(cell[0]);
     execution.executionOrder = ++this._executionOrder;
     
-    const tc = new TestCase(cell[0].document)
-    tc.test(currentSource, execution, cell[1])
+    const tc = new TestCase(cell[0].document);
+    tc.test(currentSource, execution, cell[1]);
   }
 }
