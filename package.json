@@ -3,7 +3,7 @@
   "publisher": "chelate1118",
   "displayName": "OJ-With",
   "description": "Visual Studio Code plugin supports Online Judge",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "repository": "https://github.com/chelate1118/oj-with-vsc",
   "engines": {
     "vscode": "^1.72.0"

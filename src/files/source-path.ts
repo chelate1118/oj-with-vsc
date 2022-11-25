@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import { ojwController } from '../extension';
 import { workspacePath } from '../test-case/test';
 
-export var currentSource = '/main.cpp'
+export var currentSource = '/main.cpp';
 
 export function setSourcePath(path: string) {
     currentSource = path;

@@ -6,7 +6,7 @@ import { Language } from './test-case-token';
 const execFile = require('child_process').execFile;
 const stream = require('stream');
 
-export const workspacePath: string = vscode.workspace.workspaceFolders![0].uri.path;
+export const workspacePath: string = vscode.workspace.workspaceFolders![0].uri.fsPath;
 const binaryPath: string = workspacePath + '/.ojw_exe';
 
 export class TestCase {
